@@ -1,62 +1,82 @@
 # 把函数放进另一个文件
 
-把分钟换算函数放进 `study_minutes.py`，另一个文件就能使用它。两个文件都在项目的 `examples` 目录。用 VS Code 打开项目，在 PowerShell 终端运行下面的命令，再输入分钟数。
-
-```powershell
-python -X utf8 .\examples\python_local_module.py
-```
+先完成单文件的练习时长统计器，再把计算函数搬进 `study_minutes.py`。入口文件保留输入和输出。在项目根目录执行 `python examples/python_local_module.py`。在线版已配好两个文件，可直接运行。
 
 ## 逐行读代码
 
-编辑区显示主程序 `examples/python_local_module.py`。运行时它会导入同目录的配套模块。
-
 ```python
-# 两个 .py 文件应放在同一个文件夹。
-from study_minutes import to_hours
+from study_minutes import parse_minutes, summarize
 
-entered = int(input())
-hours, minutes = to_hours(entered)
-print(f"{hours} 小时，{minutes} 分钟")
+def main():
+    minutes = parse_minutes(input())
+    goal = int(input())
+    total, latest, reached_count = summarize(minutes, goal)
+    print(f"总时长 {total}")
+    if latest is None:
+        print("暂无记录")
+    else:
+        print(f"最近一次 {latest}")
+    print(f"达标 {reached_count} 次")
+
+if __name__ == "__main__":
+    main()
 ```
 
-1. `from study_minutes import to_hours` 从同目录的 `study_minutes.py` 取出函数。在 `import` 里省略 `.py` 后缀。
-2. `int(input())` 读取分钟整数。
-3. 调用刚导入的 `to_hours()`，拆包接收两项结果并输出。
+1. `from study_minutes import parse_minutes, summarize` 把模块中的两个名字带入当前文件。导入时省略 `.py`。
+2. `main()` 负责读入两行、调用函数、拆包并展示统计结果。
+3. `if __name__ == "__main__":` 只在直接运行入口文件时调用 `main()`。从其他文件导入它时，函数会被定义，输入输出不会自动开始。
+4. 也可以写 `import study_minutes`，调用 `study_minutes.summarize(...)`。此时需要给两个计算函数的调用都加上模块名。
 
-配套模块 `examples/study_minutes.py` 的内容如下。
+把下面的代码保存为同目录的 `study_minutes.py`，就能从空文件复现这份练习。
 
 ```python
+def parse_minutes(text):
+    minutes = []
+    for word in text.split():
+        minutes.append(int(word))
+    return minutes
+
+def summarize(minutes, goal):
+    total = 0
+    reached_count = 0
+    for duration in minutes:
+        total += duration
+        if duration >= goal:
+            reached_count += 1
+    latest = minutes[-1] if minutes else None
+    return total, latest, reached_count
+
 def to_hours(total_minutes):
     return total_minutes // 60, total_minutes % 60
 ```
 
-如果要运行网页保存的个人版主程序，把 `study_minutes.py` 复制到个人版主程序所在目录，再展开「VS Code 本地调试」运行提示的命令。
-
 ## 示例输入与输出
 
-输入
-
 ```text
-75
+15 20 25
+20
 ```
 
-输出
-
 ```text
-1 小时，15 分钟
+总时长 60
+最近一次 25
+达标 2 次
 ```
 
 ## 常见错误
 
-- `ModuleNotFoundError` 往往表示模块的文件名或位置不符合预期。先检查两个 `.py` 文件是否同目录。
-- 在模块顶层写 `input()`，导入模块时也可能被要求输入。可把演示放到主程序里。
+`ModuleNotFoundError` 时查模块文件名和位置。`ImportError` 时查模块中是否真的定义了那个函数。`NameError` 时对照调用名和导入语句。直接在模块顶层写 `input()` 会让别人导入时也需要输入。自己创建的 `math.py` 也可能与标准库同名。
 
 ## 动手练习
 
 ### 基础练习
 
-运行主程序，输入 75 和 0，再在模块中找到执行换算的那一行。
+先输入 `15 20 25` 和目标 `20`，再试空列表与单独的 `0`。
 
 ### 进阶练习
 
-在自己复制的模块末尾加上 `if __name__ == "__main__":`，在它的缩进里打印 `to_hours(60)`。分别运行模块和主程序，观察只有直接运行模块时才额外打印这行。
+把两处调用改为通过模块名访问。在同目录创建 `verify.py`，导入入口模块并检查导入过程没有读取输入。
+
+### 从空白文件写
+
+把上一课自己写的阅读页数程序拆成 `reading.py` 和 `main.py`，用普通导入与别名导入各跑一次。

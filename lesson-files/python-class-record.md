@@ -52,3 +52,7 @@ print(f"{second.topic} {second.minutes}")
 ### 进阶练习
 
 再创建「树 15」这一条记录，按三行输出。预测三条分别储存了什么。
+
+## 变量名与实例属性
+
+看 `first = Record("数组", 20)` 时，`first` 用来找到一个对象，而 `first.minutes` 取这个对象里的属性。两个变量如果分别创建实例，就各有自己的属性。若写成 `second = first`，两个名字就指向同一个对象。试着修改 `second.minutes` 并打印 `first.minutes`。

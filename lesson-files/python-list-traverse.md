@@ -54,3 +54,7 @@ print(f"总计 {total}")
 ### 进阶练习
 
 在求和循环里额外数出大于等于 15 的项目。用默认输入核对计数 2。
+
+## 遍历值还是下标
+
+`for number in minutes` 每次取出一个值。若要修改列表中的某个位置，可以用 `for index in range(len(minutes))`，再读写 `minutes[index]`。只在循环里写 `number = number + 1` 不会替换原列表里的整数。遍历时需要删除多项，可以先把要保留的项追加到新列表。

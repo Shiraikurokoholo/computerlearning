@@ -1,51 +1,58 @@
 # 使用标准库模块
 
-模块把相关工具放在一起。`math` 随 Python 安装，里面的 `sqrt()` 可以求非负数的平方根，例如 9 乘 9 得 81，所以 81 的平方根是 9。
+四种方式都在用同一个平方根函数。每次导入会在当前文件中创建一个名字。用一个空文件分别尝试四行导入语句，观察各自能使用的名字。
 
 ## 逐行读代码
 
-完整程序在编辑区，也可单独运行 `examples/python_stdlib_import.py`。
-
 ```python
-# math 是 Python 自带的模块。
 import math
+import math as m
+from math import sqrt
+from math import sqrt as root
 
 number = float(input())
-root = math.sqrt(number)
-print(root)
+print(math.sqrt(number))
+print(m.sqrt(number))
+print(sqrt(number))
+print(root(number))
 ```
 
-1. `import math` 让当前程序可以用 `math` 这个模块名。
-2. `float(input())` 读入数字，保留输入小数的能力。
-3. `math.sqrt(number)` 用模块名加句点找到模块里的函数。
-4. `print(root)` 输出结果。这个函数给出的是浮点数，所以 81 对应 `9.0`。
+| 导入语句 | 新名字 | 调用 |
+| --- | --- | --- |
+| `import math` | `math` | `math.sqrt(81)` |
+| `import math as m` | `m` | `m.sqrt(81)` |
+| `from math import sqrt` | `sqrt` | `sqrt(81)` |
+| `from math import sqrt as root` | `root` | `root(81)` |
+
+用 `float(input())` 读取数值。四个 `print()` 依次调用同一个函数，输出应当相同。两个模块有同名函数时，保留模块名或用别名区分。读到 `from math import *` 时，知道它会把多个公开名字带进当前文件。
 
 ## 示例输入与输出
-
-输入
 
 ```text
 81
 ```
 
-输出
-
 ```text
+9.0
+9.0
+9.0
 9.0
 ```
 
 ## 常见错误
 
-- 只写 `sqrt(number)` 时，当前作用范围里没有叫 `sqrt` 的名字。此处通过 `math.sqrt` 访问。
-- 本例输入应为非负数。输入负数会得到 `ValueError`，异常课会讲怎样阅读这类信息。
-- 给自己的文件起名时，避开 `math.py` 这样的标准库模块名。
+只写 `import math as m` 时，调用 `math.sqrt()` 会遇到 `NameError`。同理，只导入 `sqrt` 时直接调用 `sqrt()`。避免把自己的文件命名为 `math.py`，以免遮蔽标准库。平方根示例接受非负数。
 
 ## 动手练习
 
 ### 基础练习
 
-分别输入 0、16、2.25，先用乘法验证预期的平方根。
+输入 `16`，解释为何四行都是 `4.0`。
 
 ### 进阶练习
 
-再加一行显示 `root * root`，观察平方根乘回去后是否接近原数。
+逐个注释导入语句，预测哪一行会报错。
+
+### 从空白文件写
+
+从空文件写一个平方根程序，只使用 `from math import sqrt as root`。读入 `2.25`，预期输出 `1.5`。
