@@ -1,0 +1,3 @@
+YoWASP Clang: https://github.com/YoWASP/clang/tree/944dd7c774954180e621cc8e12984023a7f8bcbe
+LLVM: https://github.com/YoWASP/llvm-project/tree/97196c8eeb1d495fa43bb8af2fb26af5ef5b89fb
+Browser WASI shim 0.4.2: https://github.com/bjorn3/browser_wasi_shim
