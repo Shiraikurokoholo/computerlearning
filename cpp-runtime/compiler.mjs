@@ -18,7 +18,7 @@ self.onmessage = async ({ data: code }) => {
   let diagnostics = ''
   try {
     const files = await runClang([
-      'clang++', '-std=c++17', '-O0', '-Wl,--max-memory=67108864', 'main.cpp', '-o', 'program.wasm',
+      'clang++', '-std=c++17', '-O0', '-fno-exceptions', '-Wl,--max-memory=67108864', 'main.cpp', '-o', 'program.wasm',
     ], { 'main.cpp': code }, {
       stderr: bytes => { if (bytes && diagnostics.length < 16000) diagnostics += decoder.decode(bytes, { stream: true }) },
     })
